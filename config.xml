@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widget xmlns="http://www.w3.org/ns/widgets" xmlns:tizen="http://tizen.org/ns/widgets" id="http://lsdsoftware.com/NewsBuddy" version="1.0.0" viewmodes="maximized">
+    <access origin="http://app.diepkhuc.com" subdomains="false"></access>
+    <tizen:application id="DeP4gr1N9Z.NewsBuddy" package="DeP4gr1N9Z" required_version="2.3.2"/>
+    <content src="index.html"/>
+    <tizen:content-security-policy>script-src 'self' 'unsafe-eval'</tizen:content-security-policy>
+    <feature name="http://tizen.org/feature/screen.size.all"/>
+    <icon src="icon.png"/>
+    <name>News Buddy</name>
+    <tizen:privilege name="http://tizen.org/privilege/internet"/>
+    <tizen:profile name="wearable"/>
+    <tizen:setting background-support="enable" encryption="disable" hwkey-event="enable"/>
+</widget>
