@@ -51,4 +51,8 @@ local.properties
 .recommenders/
 
 # Tizen
-/*.wgt
+.tproject
+.rds_delta
+.sdk_delta.info
+.sign/
+*.wgt

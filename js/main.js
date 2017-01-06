@@ -26,10 +26,12 @@ function selectArticle() {
 	article = null;
 	ajaxGet("http://app.diepkhuc.com:30112/news-scraper/0/" + topicIndex + "/" + articleIndex, function(result) {
 		article = result;
-		var utter = new SpeechSynthesisUtterance();
-		utter.text = article.texts.join("\n\n");
-		utter.lang = "en_US";
-		speechSynthesis.speak(utter);
+		for (var i=0; i<article.texts.length; i+=3) {
+			var utter = new SpeechSynthesisUtterance();
+			utter.text = article.texts.slice(i,i+3).join("\n\n");
+			utter.lang = "en_US";
+			speechSynthesis.speak(utter);
+		}
 		playing = true;
 	})
 }
