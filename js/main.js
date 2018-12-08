@@ -1,4 +1,5 @@
 
+serviceUrl = "https://support.lsdsoftware.com:30299/news-scraper?capabilities=1.0";
 state = "TOPICS";
 topics = null;
 topicIndex = 0;
@@ -7,7 +8,11 @@ articleIndex = 0;
 article = null;
 playing = false;
 
-ajaxGet("http://app.diepkhuc.com:30112/news-scraper/0", function(result) {
+ajaxPost(serviceUrl, {
+	method: "getSource",
+	sourceIndex: 0
+},
+function(result) {
 	topics = result.topics;
 	topicIndex = 0;
 })
@@ -15,7 +20,12 @@ ajaxGet("http://app.diepkhuc.com:30112/news-scraper/0", function(result) {
 function selectTopic() {
 	state = "ARTICLES";
 	articles = null;
-	ajaxGet("http://app.diepkhuc.com:30112/news-scraper/0/" + topicIndex, function(result) {
+	ajaxPost(serviceUrl, {
+		method: "getTopic",
+		sourceIndex: 0,
+		topicIndex: topicIndex
+	},
+	function(result) {
 		articles = result.articles;
 		articleIndex = 0;
 	})
@@ -24,7 +34,13 @@ function selectTopic() {
 function selectArticle() {
 	state = "READING";
 	article = null;
-	ajaxGet("http://app.diepkhuc.com:30112/news-scraper/0/" + topicIndex + "/" + articleIndex, function(result) {
+	ajaxPost(serviceUrl, {
+		method: "getArticle",
+		sourceIndex: 0,
+		topicIndex: topicIndex,
+		articleIndex: articleIndex
+	},
+	function(result) {
 		article = result;
 		for (var i=0; i<article.texts.length; i+=3) {
 			var utter = new SpeechSynthesisUtterance();
@@ -75,15 +91,17 @@ window.onload = function() {
 	});
 }
 
-function ajaxGet(url, callback) {
-	var httpRequest = new XMLHttpRequest();
-	httpRequest.onreadystatechange = function() {
-		if (httpRequest.readyState === XMLHttpRequest.DONE) {
-			if (httpRequest.status === 200) callback(JSON.parse(httpRequest.responseText));
-		}
-	};
-	httpRequest.open('GET', url);
-	httpRequest.send();
+function ajaxPost(url, data, fulfill) {
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == 4) {
+        if (xhr.status == 200) fulfill(JSON.parse(xhr.responseText));
+        else console.error(xhr.responseText || xhr.statusText || xhr.status);
+      }
+    };
+    xhr.send(JSON.stringify(data));
 }
 
 function toggle(elem, visible) {
